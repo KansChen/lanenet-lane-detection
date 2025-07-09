@@ -10,9 +10,10 @@ The main network architecture is as follows:
 ![NetWork_Architecture](./data/source_image/network_architecture.png)
 
 ## Installation
-This software has only been tested on ubuntu 16.04(x64), python3.5, cuda-9.0, cudnn-7.0 with a GTX-1070 GPU. 
-To install this software you need tensorflow 1.12.0 and other version of tensorflow has not been tested but I think 
-it will be able to work properly in tensorflow above version 1.12. Other required package you may install them by
+This project now targets **Python&nbsp;3.10+** and **TensorFlow&nbsp;2.12+**. Earlier
+versions of the README referenced Python&nbsp;3.5 and TensorFlow&nbsp;1.x, but the
+code has been updated to run on modern environments.
+Install the dependencies with
 
 ```
 pip3 install -r requirements.txt

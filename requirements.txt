@@ -5,4 +5,6 @@ opencv_contrib_python
 numpy
 scikit_learn
 PyYAML
-tensorflow
+tensorflow>=2.12
+keras>=2.12
+tensorboard>=2.12
