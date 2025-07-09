@@ -17,6 +17,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 
+# TensorFlow 2.x executes operations eagerly by default which is incompatible
+# with this script's graph-based usage. Disable eager execution to retain the
+# original behaviour under TF 2.x.
+tf.compat.v1.disable_eager_execution()
+
 from lanenet_model import lanenet
 from lanenet_model import lanenet_postprocess
 from local_utils.config_utils import parse_config_utils
@@ -86,7 +91,11 @@ def test_lanenet(image_path, weights_path, with_lane_fit=True):
     image = image / 127.5 - 1.0
     LOG.info('Image load complete, cost time: {:.5f}s'.format(time.time() - t_start))
 
-    input_tensor = tf.placeholder(dtype=tf.float32, shape=[1, 256, 512, 3], name='input_tensor')
+    # Placeholder definitions must come from the tf.compat.v1 module under
+    # TensorFlow 2.x.
+    input_tensor = tf.compat.v1.placeholder(dtype=tf.float32,
+                                            shape=[1, 256, 512, 3],
+                                            name='input_tensor')
 
     net = lanenet.LaneNet(phase='test', cfg=CFG)
     binary_seg_ret, instance_seg_ret = net.inference(input_tensor=input_tensor, name='LaneNet')
@@ -94,21 +103,21 @@ def test_lanenet(image_path, weights_path, with_lane_fit=True):
     postprocessor = lanenet_postprocess.LaneNetPostProcessor(cfg=CFG)
 
     # Set sess configuration
-    sess_config = tf.ConfigProto()
+    sess_config = tf.compat.v1.ConfigProto()
     sess_config.gpu_options.per_process_gpu_memory_fraction = CFG.GPU.GPU_MEMORY_FRACTION
     sess_config.gpu_options.allow_growth = CFG.GPU.TF_ALLOW_GROWTH
     sess_config.gpu_options.allocator_type = 'BFC'
 
-    sess = tf.Session(config=sess_config)
+    sess = tf.compat.v1.Session(config=sess_config)
 
     # define moving average version of the learned variables for eval
-    with tf.variable_scope(name_or_scope='moving_avg'):
+    with tf.compat.v1.variable_scope(name_or_scope='moving_avg'):
         variable_averages = tf.train.ExponentialMovingAverage(
             CFG.SOLVER.MOVING_AVE_DECAY)
         variables_to_restore = variable_averages.variables_to_restore()
 
     # define saver
-    saver = tf.train.Saver(variables_to_restore)
+    saver = tf.compat.v1.train.Saver(variables_to_restore)
 
     with sess.as_default():
         saver.restore(sess=sess, save_path=weights_path)
