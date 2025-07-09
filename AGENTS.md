@@ -22,6 +22,9 @@ AI agents can navigate to these key modules to understand responsibilities and s
 ---
 
 ## 🧪 Training & Testing Guidelines
+### Environment
+
+download weight from README.md URL link
 
 ### Training Workflow
 
@@ -65,21 +68,7 @@ python tools/evaluate_lanenet_on_tusimple.py \
   2. Automatically generate `train.txt` and `val.txt`.
   3. Use project root as the base path for all file references.
 
----
 
-## 🔍 Testing & Code Quality
-
-AI agent should run these checks after code changes:
-
-```bash
-# If applicable
-npm run lint          
-python -m flake8      
-pytest                
-```
-
-* New modules should include basic unit tests.
-* Code must follow style guidelines, with descriptive names and no lint errors.
 
 ---
 
